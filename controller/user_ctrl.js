@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const controller = {
   //! 登入
   login_account: async (req, res) => {
+    console.log('進來了!',req.body);
     //* new hash
     const hash = crypto.createHash("md5");
     const { user_account, password } = req.body;

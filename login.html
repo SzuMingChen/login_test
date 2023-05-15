@@ -36,6 +36,19 @@
     const registerForm = document.getElementById("register-form");
     const loginForm = document.getElementById("login-form");
     const errorMessage = document.getElementById("error-message");
+
+    fetch('http://127.0.0.1:3000/')
+      .then(response => response.json())
+      .then(data => {
+        // 找到要更新的元素
+         const loginForm = document.querySelector('login-form');
+          // 更新元素的内容
+          loginForm.innerHTML = data.yourElementData;
+       })
+  .catch(error => {
+    // 处理错误
+  });
+
   </script>
   <style>
     body {
