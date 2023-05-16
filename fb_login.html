@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
-    <title>Login Page</title>
-    <script src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+  </head>
+  <body>
+    <h1>Facebook Login</h1>
+    <div class="fb-login-button" data-size="large" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
+    <button id="logout-button">Log Out</button>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '208332558668379',
-                cookie: true,
-                xfbml: true,
-                version: 'v16.0'
-            });
-        };
+    // 初始化處理
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '217837094329753',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v16.0',
+          frictionlessRequests: true
+        });
+          
+        FB.AppEvents.logPageView();   
+          
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      };
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-    </script>
-</head>
-
-<body>
-    <h1>Login Page</h1>
-    <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit" id="login-button">Login</button>
-        <button onclick="loginWithFacebook()">Log in with Facebook</button>
-    </form>
-    <div id="login-message"></div>
-    <script src="app.js"></script>
-    <script>
-        function loginWithFacebook() {
-            FB.login(function (response) {
-                if (response.authResponse) {
-                    var accessToken = response.authResponse.accessToken;
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'http://127.0.0.1:5500');
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.onload = function () {
-                        // Handle response from your backend API
-                    };
-                }
-            })
+      function statusChangeCallback(response) {
+        console.log('statusChangeCallback');
+        console.log(response);
+        if (response.status === 'connected') {
+          // Logged into your app and Facebook.
+          testAPI();
+        } else {
+          // Not logged into your app or Facebook.
         }
-    </script>
-</body>
+      }
 
+      function testAPI() {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          console.log('Successful login for: ' + response.name);
+          console.log(response);
+        });
+      }
+      
+              function logout() {
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    // 用戶已登入，註銷用戶
+                    FB.logout(function (response) {
+                        // 用戶已註銷
+                        console.log('User logged out.');
+                        // 重新載入頁面
+                        window.location.reload();
+                    });
+                } else {
+                    // 用戶未登入，重新載入頁面
+                    window.location.reload();
+                }
+            });
+        }
+        
+        // 監聽按鈕觸發
+        document.getElementById('logout-button').addEventListener('click', function () {
+            logout();
+        });
+    </script>
+  </body>
 </html>
