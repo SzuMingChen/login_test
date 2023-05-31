@@ -10,33 +10,23 @@
   <title>Document</title>
   <body>
     <div class="form-container">
-      <h2>註冊</h2>
-      <form id="register-form">
-        <input type="name" placeholder="暱稱" name="name" required />
-        <input type="text" placeholder="帳號" name="username" required />
-        <input type="password" placeholder="密碼" name="password" required />
-        <input
-          type="password"
-          placeholder="確認密碼"
-          name="password"
-          required
-        />
-        <button type="submit">註冊</button>
-      </form>
-      <h2>登入</h2>
-      <form id="login-form">
-        <input type="text" placeholder="帳號" name="username" required />
+      <h2><%= title %></h2>
+      <form  action="/api/login" method="post" >
+        <input type="text" placeholder="帳號" name="user_account" required />
         <input type="password" placeholder="密碼" name="password" required />
         <button type="submit">登入</button>
       </form>
-      <p id="error-message"></p>
+      <p></p>
+      <form action="/api/register" method="get" >
+        <button type="submit">註冊</button>
+      </form>
+      <p></p>
+      <form action="/api/forgot" method="get" >
+        <button type="submit">忘記密碼?</button>
+      </form>
     </div>
+
   </body>
-  <script>
-    const registerForm = document.getElementById("register-form");
-    const loginForm = document.getElementById("login-form");
-    const errorMessage = document.getElementById("error-message");
-  </script>
   <style>
     body {
       background-color: #f2f2f2;

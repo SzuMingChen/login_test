@@ -11,13 +11,16 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>待辦清單</h1>
+    <h1><%= title %></h1>
+    <form action="/" method="get">
+      <button type="submit">登出</button>
+    </form>
+    <p></p>
     <form>
       <input type="text" id="new-item" placeholder="待辦事項輸入.." />
-      <button type="submit" id="add-btn">增加</button>
+      <button type="submit" id="add-btn">+</button>
     </form>
     <ul id="to-do-list"></ul>
-    <script src="app.js"></script>
   </body>
   <script>
     const newItemInput = document.getElementById("new-item");
@@ -37,13 +40,10 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-
+    
     input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 15px;
     }
 
     button[type="submit"] {

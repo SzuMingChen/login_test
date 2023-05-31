@@ -1,95 +1,92 @@
+const { log } = require("console");
 const model = require("../model/user_model");
 const crypto = require("crypto");
 
 const controller = {
   //! 登入
   login_account: async (req, res) => {
+    console.log('----進ctrl---->',req.body);
     //* new hash
     const hash = crypto.createHash("md5");
     const { user_account, password } = req.body;
-    const result = await model.check_account(user_account);
-    console.log("---ctrl_login--->", result);
     //* 加密
     const password_ans = hash.update(password).digest("hex");
-    if (!result || result == "") {
-      return res.status(404).send({ error: "登入失敗" });
-    } else if (result) {
-      if (result[0].password !== password_ans) {
-        return res.status(404).send({ error: "密碼輸入錯誤" });
-      }
-      return res.status(200).send({ msg: "登入成功" });
-    }
+    //* 查找現有帳號確認有無註冊 
+    const [ check_account ] = await model.check_account(user_account, password_ans);
+    console.log('----ctrl回---->', check_account);
+    if ( !check_account ) return res.render("login", { title: '帳號密碼輸入錯誤!!' });
+    //* 判斷密碼有無輸入錯誤
+    if (check_account.password !== password_ans) return res.render("login", { title: '帳號密碼輸入錯誤!!' });
+
+    //* 成功就跳轉至todo_list頁面
+    return res.render("todolist", { title: `歡迎!!${check_account.name}!!` });
+    
   },
   //! 創建
-  //! 目前重複創建已關閉的帳號會壞掉
   create_account: async (req, res) => {
+    console.log('----進ctrl---->',req.body);
     //* new hash
     const hash = crypto.createHash("md5");
-    const { user_account, password, password_again, name } = req.body;
+    const { name, user_account, password, password_again } = req.body;
     //* 阻擋密碼輸入不一致
     if (password !== password_again)
-      return res.status(404).send({ error: "密碼不一致" });
-    const status = 1;
-    //* 確認有無重複註冊
-    const check_account = await model.check_account(user_account);
-    console.log('11111',check_account);
+      return res.render("register", { title: '密碼不一致!!' });
+    //* 查找現有帳號及暱稱，確認有無重複註冊 
+    const check_account = await model.search_account();
+    console.log('----ctrl回---->', check_account);
+    for (let i = 0; i < check_account.length; i++) {
+      if (user_account === check_account[i].user_account) {
+        return res.render("register", { title: '帳號已被註冊!!' });
+      }
+      if (name === check_account[i].name) {
+        return res.render("register", { title: '暱稱已被註冊!!' });
+      }
+    }
     //* 加密
     const password_ans = hash.update(password).digest("hex");
-    if (!check_account || check_account == "") {
-      const result = await model.create_account(
-        user_account,
-        password_ans,
-        name,
-        status
-      );
-      if (result === true) {
-        return res.status(200).send({ msg: "創建成功" });
-      }
-      return res.status(404).send({ error: "創建失敗" });
+    //* 以上確認完成後執行註冊 
+    const status = 1;
+    const result = await model.create_account(
+      user_account,
+      password_ans,
+      name,
+      status
+    );
+    console.log('----ctrl回---->', result);
+    if (result) {
+      return res.render("login", { title: '註冊成功!! 請直接登入' });
     }
-    if (check_account) return res.status(404).send({ error: "帳號重複" });
-  },
-  //! 刪除
-  close_account: async (req, res) => {
-    const { user_account } = req.body;
-    const check = await model.check_account(user_account);
-    console.log("---ctrl_check--->", check);
-    if (check) {
-      const result = await model.close_account(user_account);
-      console.log("---ctrl_edit--->", result);
-      if (!result) {
-        return res.status(404).send({ error: "刪除失敗" });
-      }
-      return res.status(200).send({ msg: "帳號刪除成功" });
-    }
-    return res.status(404).send({ error: "查無此帳號" });
+    return res.render("register", { title: '不明原因導致註冊失敗!!' });
+
   },
   //! 修改
   edit_account: async (req, res) => {
-    const { user_account, old_value, new_value } = req.body;
+    console.log('----進ctrl---->',req.body);
+    const { user_account,  new_password, check_new_password } = req.body;
+    //* 暫定只能修改密碼
+    if (new_password !== check_new_password) {
+      return res.render("forgot", { title: '密碼不一致!!' });
+    }
     //* 目前暫定只能修改密碼 加密舊數值與新數值
     const hash = crypto.createHash("md5");
-    const old_value_ans = hash.update(old_value).digest("hex");
-    const hash2 = crypto.createHash("md5");
-    const new_value_ans = hash2.update(new_value).digest("hex");
-    //* 撈舊數值
+    const new_password_ans = hash.update(new_password).digest("hex");
+
+    //* 撈舊帳號
     const check = await model.check_account(user_account);
-    if (!check || check == "") {
-      return res.status(404).send({ error: "編輯數值異常" });
-    }
-    //* 暫定只能修改密碼
-    if (check[0].password !== old_value_ans) {
-      return res.status(404).send({ error: "與舊數值不相符" });
+    console.log("----ctrl回---->", check);
+    if (!check) {
+      return res.render("forgot", { title: '帳號輸入錯誤!!' });
     }
 
-    const result = await model.edit_account(new_value_ans, user_account);
+    //* 更新密碼
+    const result = await model.edit_account(new_password_ans, user_account);
     if (!result) {
-      return res.status(404).send({ error: "編輯失敗" });
+      return res.render("forgot", { title: '更新失敗!!' });
     }
-    return res.status(200).send({ msg: "編輯成功" });
+    return res.render("login", { title: '更新成功!! 請直接登入' });
   },
   //! 登出
-  logout_account: async(req, res) => {
+  logout_account: async (req, res) => {
 
   },
 };

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>註冊登入頁面</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Document</title>
+
+<body>
+  <div class="form-container">
+    <h2><%= title %></h2>
+    <form action="/api/create" method="post">
+      <input type="text" placeholder="暱稱..." name="name" required />
+      <input type="text" placeholder="帳號..." name="user_account" required />
+      <input type="password" placeholder="密碼..." name="password" required />
+      <input type="password" placeholder="確認密碼..." name="password_again" required />
+      <button type="submit">註冊</button>
+    </form>
+    <p id="error-message"></p>
+    <form action="/" method="get">
+      <button type="submit">回登入頁</button>
+    </form>
+  </div>
+</body>
+<style>
+  body {
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+  }
+
+  .form-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+    max-width: 500px;
+    padding: 20px;
+  }
+
+  h2 {
+    margin-top: 0px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    margin-bottom: 10px;
+    padding: 15px;
+  }
+
+  button[type="submit"] {
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+
+  #error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+  }
+</style>
+
+</html>
