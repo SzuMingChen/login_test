@@ -26,11 +26,11 @@ const model = {
     }
   },
   //! 增
-  create_list: async (user_account, title, body, name, delete_status) => {
+  create_list: async (user_account, body, name, delete_status) => {
     const transaction = await mysql.getConnection();
     try {
       await transaction.beginTransaction();
-      const target = `INSERT INTO todo_list.todo_list_table (user_account, title, body, name, delete_status) VALUES ('${user_account}', '${title}', '${body}', '${name}', '${delete_status}');
+      const target = `INSERT INTO todo_list.todo_list_table (user_account,  body, name, delete_status) VALUES ('${user_account}', '${body}', '${name}', '${delete_status}');
       `;
 
       const result = await mysql.execute(target);

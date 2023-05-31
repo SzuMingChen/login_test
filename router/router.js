@@ -13,9 +13,29 @@ router.post("/edit", user_ctrl.edit_account);
 
 //* todo_list
 router.get("/get", list_ctrl.get_all_list);
-router.post("/write", list_ctrl.write_new_list);
+router.post("/write", user_ctrl.write_new_list);
 router.post("/remove", list_ctrl.remove_my_list);
 router.post("/change", list_ctrl.edit_my_list);
+
+// 处理新增待办事项请求
+ router.post('/add', (req, res) => {
+    const newItem = req.body.newItem;
+    toDoList.push(newItem);
+    res.redirect('/');
+  });
+  // 处理编辑待办事项请求
+  router.post('/edit', (req, res) => {
+    const index = req.body.index;
+    const updatedItem = req.body.updatedItem;
+    toDoList[index] = updatedItem;
+    res.redirect('/');
+  });
+  // 处理删除待办事项请求
+  router.post('/delete', (req, res) => {
+    const index = req.body.index;
+    toDoList.splice(index, 1);
+    res.redirect('/');
+  });
 
 
 //* 註冊頁面跳轉

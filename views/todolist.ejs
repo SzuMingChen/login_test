@@ -1,31 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!DOCTYPE html>
-    <meta charset="UTF-8" />
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="style.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <form action="/" method="get">
-      <button type="submit">登出</button>
-    </form>
-    <p></p>
-    <form>
-      <input type="text" id="new-item" placeholder="待辦事項輸入.." />
-      <button type="submit" id="add-btn">+</button>
-    </form>
-    <ul id="to-do-list"></ul>
-  </body>
-  <script>
-    const newItemInput = document.getElementById("new-item");
-    const addButton = document.getElementById("add-btn");
-  </script>
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,15 +17,15 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-    
+
     input[type="text"] {
-    margin-bottom: 10px;
-    padding: 15px;
+      margin-bottom: 10px;
+      padding: 15px;
     }
 
     button[type="submit"] {
-      padding: 10px;
-      font-size: 16px;
+      padding: 15px;
+      font-size: 15px;
       background-color: #4caf50;
       color: #fff;
       border: none;
@@ -85,4 +62,31 @@
       cursor: pointer;
     }
   </style>
+</head>
+<body>
+  <form action="/" method="get">
+    <button type="submit">登出</button>
+  </form>
+  <h1>To-Do List</h1>
+  <form action="/api/write" method="post">
+    <input type="text" name="newItem" placeholder="請輸入代辦事項..." required>
+    <button type="submit">Add</button>
+  </form>
+  <ul>
+    <% for (let i = 0; i < toDoList.length; i++) { %>
+      <li>
+        <span><%= toDoList[i] %></span>
+        <form action="/api/change" method="post" style="display: inline;">
+          <input type="hidden" name="index" value="<%= i %>">
+          <input type="text" name="updatedItem" value="<%= toDoList[i] %>" required>
+          <button type="submit">編輯</button>
+        </form>
+        <form action="/api/remove" method="post" style="display: inline;">
+          <input type="hidden" name="index" value="<%= i %>">
+          <button type="submit">刪除</button>
+        </form>
+      </li>
+    <% } %>
+  </ul>
+</body>
 </html>

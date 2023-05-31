@@ -5,11 +5,11 @@ const port = 3000
 
 app.get('/', (req, res) => {
 
-    res.send('<a href="./login/koisme/ko12345678/KO"> login </a>')
+    res.send('<a href="./login/jasmine/123456/js"> login </a>')
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`http://127.0.0.1:${port}`)
 })
 
 app.use(session({
@@ -18,7 +18,7 @@ app.use(session({
     saveUninitialized: false, //! 設置是否在初始化期間保存未修改的 Session，設為 false 表示僅在 Session 有修改時才保存。
     cookie: { //! 設定 Session 的 Cookie 選項，例如安全性、有效期等。
         secure: false, //! 用於指定是否僅在使用安全連接（HTTPS）時才傳送 Cookie。
-        maxAge: 100000 //! Session 的有效日期。
+        maxAge: 600000 //! Session 的有效日期。
     }
 }));
 
@@ -37,7 +37,7 @@ app.get('/wer', (req, res) => {
 app.get('/login/:account/:password/:name', (req, res) => {
     //step 驗證帳號
     const userAccount = req.params;
-
+    console.log('11111111',userAccount);
 
     //! 在登入成功後，將使用者資料存儲到 Session 中
     req.session.user = { account: req.params.account, name: req.params.name };
@@ -51,9 +51,11 @@ app.get('/login/:account/:password/:name', (req, res) => {
 app.get('/profile', (req, res) => {
     //! 獲取 session ID
     const sessionID = req.sessionID;
+    console.log('22222222',sessionID);
 
     //! 從 Session 中讀取使用者資料
     const userInfo = req.session.user;
+    console.log('33333333',userInfo);
 
     console.log(`-profile- 使用者 [ ${userInfo?.name} ] => ${sessionID}`);
 
