@@ -1,87 +1,110 @@
 const model = require("../model/list_model");
 const model_ctrl = require("../model/user_model");
 
-const controller = {
-  //! 取得所有事項
-  get_all_list: async (req, res) => {
-    const { user_account } = req.query;
+//! todolist主頁 並取得所有事項
+exports.home = async (req, res) => {
+  // 初始化代辦事項
+  let toDoList = [];
 
-    const result = await model.check_list(user_account);
-    //* 回傳前端格式
-    const list = result.map((data) => {
-      return {
-        暱稱: data?.name,
-        主題: data?.title,
-        內容: data?.body,
-        文章編號: data?.id,
-      };
-    });
+  //todo 從 Session 中讀取使用者資料
+  const userInfo = req.session.user;
+  console.log('使用者資訊', userInfo);
 
-    console.log("---ctrl_get_list--->", list);
-    if (!list || list == "") {
-      return res.status(404).send({ msg: "載入失敗" });
-    }
-    return res.status(200).send(list);
-  },
-  //! 新增待辦事項
-  write_new_list: async (req, res) => {
-    const { title, body } = req.body;
-    const { user_account } = req.query;
-    const delete_status = 1;
-    //* 查找暱稱 從user_ctrl_model
-    const [check] = await model_ctrl.check_account(user_account);
+  //todo 獲取 session ID
+  const sessionID = req.sessionID;
+  console.log(`- 使用者 [ ${userInfo.name} ] => sessionID:${sessionID}`);
 
-    const name = check.name;
+  //* 取得該帳號的所屬內容
+  const result = await model.check_list(userInfo.user_account);
 
-    //* 寫入內容
-    const create = await model.create_list(
-      user_account,
-      title,
-      body,
-      name,
-      delete_status
-    );
+  for (let i = 0; i < result.length; i++) {
+    console.log('近來摟！！', result[i]);
+    toDoList.push({ id:result[i].id, body:result[i].body});
+  }
+  console.log('now~~',toDoList);
 
-    if (create) {
-      const result = await model.check_list(user_account);
-
-      console.log("---ctrl_create_list--->", result);
-      if (!result || result == "") {
-        return res.status(404).send({ msg: "新增失敗" });
-      }
-      return res.status(200).send({ msg: "新增成功" });
-    }
-  },
-  //! 刪除事項
-  remove_my_list: async (req, res) => {
-    const { id } = req.body;
-    const { user_account } = req.query;
-
-    const remove = await model.remove_list(id);
-
-    const result = await model.check_list(user_account);
-
-    console.log("---ctrl_remove_list--->", result);
-    if (!result || result == "") {
-      return res.status(404).send({ msg: "刪除失敗" });
-    }
-    return res.status(200).send({ msg: "刪除成功" });
-  },
-  //! 更新事項
-  edit_my_list: async (req, res) => {
-    const { id, value } = req.body;
-    const { user_account } = req.query;
-
-    const change = await model.edit_list(value, id);
-
-    const result = await model.check_list(user_account);
-
-    console.log("---ctrl_remove_list--->", result);
-    if (!result || result == "") {
-      return res.status(404).send({ msg: "更新失敗" });
-    }
-    return res.status(200).send({ msg: "更新成功" });
-  },
+  //* 將該帳號的待辦資訊回傳
+  return res.render('todolist', { toDoList: toDoList });
 };
 
-module.exports = controller;
+//! 新增待辦事項
+exports.write_new_list = async (req, res) => {
+  console.log('----進ctrl---->', req.body);
+  //* 初始化代辦事項
+  let toDoList = [];
+  //todo 從 Session 中讀取使用者資料
+  const user = JSON.stringify(req.session.user);
+  const userInfo = JSON.parse(user);
+  console.log(`- 使用者 ->`, userInfo);
+  if (userInfo.user_account === undefined) {
+    return res.send("尚未登入")
+  }
+  //* 寫入內容
+  const body = req.body.new_item;
+  const delete_status = 1;
+  const create = await model.create_list(
+    userInfo.user_account,
+    body,
+    userInfo.name,
+    delete_status
+  );
+ // 成功
+  if (create) {
+    //* 取得該帳號的所屬內容
+    const result = await model.check_list(userInfo.user_account);
+    for (let i = 0; i < result.length; i++) {
+      toDoList.push({ id:result[i].id, body:result[i].body});
+    }
+    //* 將該帳號的待辦資訊回傳
+    return res.render('todolist', { toDoList: toDoList });
+  }
+// 失敗
+  return res.send({ msg: "新增失敗!!" });
+};
+
+//! 刪除事項
+exports.remove_my_list = async (req, res) => {
+  console.log('----進ctrl---->', req.body);
+  //todo 從 Session 中讀取使用者資料
+  const user = JSON.stringify(req.session.user);
+  const userInfo = JSON.parse(user);
+  console.log(`- 使用者 ->`, userInfo);
+  if (userInfo.user_account === undefined) {
+    return res.send("尚未登入")
+  }
+  //* 取得文章內容，並進行軟刪除
+  const id = req.body.id;
+
+  const remove = await model.remove_list(id);
+
+  if (!remove) {
+    return res.status(404).send({ msg: "刪除失敗" });
+  }
+  return res.redirect('/api/todolist');
+};
+
+//! 更新事項
+exports.edit_my_list = async (req, res) => {
+  console.log('----進ctrl---->', req.body);
+  //todo 從 Session 中讀取使用者資料
+  const user = JSON.stringify(req.session.user);
+  const userInfo = JSON.parse(user);
+  console.log(`- 使用者 ->`, userInfo);
+  if (userInfo.user_account === undefined) {
+    return res.send("尚未登入")
+  }
+  const id = req.body.id;
+  const value = req.body.body;
+  const user_account = userInfo.user_account;
+
+  const change = await model.edit_list(value, id);
+
+  const result = await model.check_list(user_account);
+
+  console.log("---ctrl_remove_list--->", result);
+  if (!result) {
+    return res.status(404).send({ msg: "更新失敗" });
+  }
+  return res.redirect('/api/todolist');
+};
+

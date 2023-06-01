@@ -64,25 +64,25 @@
   </style>
 </head>
 <body>
-  <form action="/" method="get">
+  <form action="/api/home" method="get">
     <button type="submit">登出</button>
   </form>
   <h1>To-Do List</h1>
   <form action="/api/write" method="post">
-    <input type="text" name="newItem" placeholder="請輸入代辦事項..." required>
+    <input type="text" name="new_item" placeholder="請輸入代辦事項..." required>
     <button type="submit">Add</button>
   </form>
   <ul>
     <% for (let i = 0; i < toDoList.length; i++) { %>
       <li>
-        <span><%= toDoList[i] %></span>
         <form action="/api/change" method="post" style="display: inline;">
-          <input type="hidden" name="index" value="<%= i %>">
-          <input type="text" name="updatedItem" value="<%= toDoList[i] %>" required>
+          <input type="hidden" name="id" value="<%= toDoList[i].id %>">
+          <input type="text" name="body" value="<%= toDoList[i].body %>" required>
           <button type="submit">編輯</button>
         </form>
         <form action="/api/remove" method="post" style="display: inline;">
-          <input type="hidden" name="index" value="<%= i %>">
+          <input type="hidden" name="id" value="<%= toDoList[i].id %>">
+          <input type="hidden" name="body" value="<%= toDoList[i].body %>">
           <button type="submit">刪除</button>
         </form>
       </li>

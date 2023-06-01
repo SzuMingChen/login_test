@@ -3,7 +3,56 @@
 
 <head>
   <title>註冊登入頁面</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+    }
+  
+    .form-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      margin: 50px auto;
+      max-width: 500px;
+      padding: 20px;
+    }
+  
+    h2 {
+      margin-top: 0px;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    input[type="text"],
+    input[type="password"] {
+      margin-bottom: 10px;
+      padding: 15px;
+    }
+  
+    button[type="submit"] {
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+    }
+  
+    button[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+  
+    #error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
 </head>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,61 +68,10 @@
       <input type="password" placeholder="確認新密碼..." name="check_new_password" required />
       <button type="submit">確認更新</button>
     </form>
-    <p id="error-message"></p>
-    <form action="/" method="get">
+    <p></p>
+    <form action="/api/home" method="get">
       <button type="submit">回登入頁</button>
     </form>
   </div>
 </body>
-<style>
-  body {
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
-  }
-
-  .form-container {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin: 50px auto;
-    max-width: 500px;
-    padding: 20px;
-  }
-
-  h2 {
-    margin-top: 0px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  input[type="text"],
-  input[type="password"] {
-    margin-bottom: 10px;
-    padding: 15px;
-  }
-
-  button[type="submit"] {
-    background-color: #4caf50;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    padding: 10px;
-  }
-
-  button[type="submit"]:hover {
-    background-color: #3e8e41;
-  }
-
-  #error-message {
-    color: red;
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: center;
-  }
-</style>
-
 </html>
