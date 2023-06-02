@@ -15,7 +15,7 @@ exports.check_list = async (user_account) => {
 
     const [result] = await mysql.execute(target);
 
-    console.log("---model_check_list--->", result);
+    // console.log("---model_check_list--->", result);
 
     await transaction.commit();
     transaction.release();
@@ -36,7 +36,7 @@ exports.create_list = async (user_account, body, name) => {
 
     const result = await mysql.execute(target);
 
-    console.log("---model_create_list--->", result);
+    // console.log("---model_create_list--->", result);
     await transaction.commit();
     transaction.release();
     return result;
@@ -56,7 +56,7 @@ exports.remove_list = async (list_id) => {
 
     const result = await mysql.execute(target);
 
-    console.log("---model_remove_list--->", result);
+    // console.log("---model_remove_list--->", result);
     await transaction.commit();
     transaction.release();
     return result;
@@ -75,7 +75,7 @@ exports.edit_list = async (value, list_id) => {
       `;
     const result = await mysql.execute(target);
 
-    console.log("---model_edit_list--->", result);
+    // console.log("---model_edit_list--->", result);
     await transaction.commit();
     transaction.release();
     return result;

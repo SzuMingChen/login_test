@@ -3,14 +3,14 @@ const crypto = require("crypto");
 
 //! 登入
 exports.login_account = async (req, res) => {
-  console.log('----進ctrl---->', req.body);
+  // console.log('----進ctrl---->', req.body);
   const { user_account, password } = req.body;
   //* 加密
   const hash = crypto.createHash("md5");
   const password_ans = hash.update(password).digest("hex");
   //* 查找現有帳號確認有無註冊 
   const [check_account] = await user_model.check_account(user_account);
-  console.log('----ctrl回---->', check_account);
+  // console.log('----ctrl回---->', check_account);
   if (!check_account) return res.render("login", { title: '帳號密碼輸入錯誤!!' });
   //* 判斷密碼有無輸入錯誤
   if (check_account.password !== password_ans) return res.render("login", { title: '帳號密碼輸入錯誤!!' });
@@ -56,7 +56,7 @@ exports.create_account = async (req, res) => {
     password_ans,
     name
   );
-  console.log('----ctrl回---->', result);
+  // console.log('----ctrl回---->', result);
   if (result) {
     return res.render("login", { title: `歡迎${name}!! 請直接登入` });
   }
@@ -65,7 +65,7 @@ exports.create_account = async (req, res) => {
 
 //! 修改密碼
 exports.edit_account = async (req, res) => {
-  console.log('----進ctrl---->', req.body);
+  // console.log('----進ctrl---->', req.body);
   const { user_account, new_password, check_new_password } = req.body;
   //* 暫定只能修改密碼
   if (new_password !== check_new_password) {
@@ -76,17 +76,17 @@ exports.edit_account = async (req, res) => {
   const new_password_ans = hash.update(new_password).digest("hex");
 
   //* 撈舊帳號，比對有無輸入錯誤
-  const check = await user_model.check_account(user_account);
-  console.log("----ctrl回---->", check);
-  if (!check) {
-    return res.render("forgot", { title: '帳號錯誤，忘記帳號請洽客服！' });
-  }
+  const [ check ] = await user_model.check_account(user_account);
+  // console.log("----ctrl回---->", check);
+  if (check === undefined) {
+    return res.render("forgot", { title: '查無此帳號，忘記帳號請洽客服！' });
+  };
   //* 更新密碼
   const result = await user_model.edit_account(new_password_ans, user_account);
   if (!result) {
     return res.render("forgot", { title: '更新失敗!!' });
   }
-  return res.render("login", { title: '更新成功!! 請直接登入' });
+  return res.render("login", { title: `${check.name}歡迎回來!! 請直接登入` });
 };
 
 //! 登出
