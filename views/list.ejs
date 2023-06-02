@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        width: 500px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        left: 25%;
+      }
+
+      h1 {
+        text-align: center;
+      }
+      .list-input {
+        width: 50%;
+        height: auto;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      button[type="submit"] {
+        width: 55px;
+        height: 50px;
+        font-size: 15px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      ul {
+        list-style-type: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      li {
+        margin-bottom: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding-left: 20px;
+      }
+
+      li input[type="text"] {
+        width: 20%;
+        height: auto;
+      }
+
+      li span {
+        font-size: 16px;
+        text-align: center;
+        /* margin: 0 auto; */
+        display: flex;
+        align-items: center;
+
+      }
+      .del {
+        background-color: #2196f3;
+      }
+      .edit {
+        background-color: #ff5722;
+      }
+      .add {
+        background-color: #4caf50;
+      }
+    </style>
+  </head>
+  <body>
+    <% for (let i = 0; i < 1; i++) { %>
+    <h1><%= todo_list[i].name %>的To-Do List</h1>
+    <form class="list-input" action="/api/write" method="post">
+      <input
+        type="text"
+        name="new_item"
+        placeholder="請輸入代辦事項..."
+        required
+      />
+      <button class="add" type="submit">Add</button>
+    </form>
+    <% } %>
+    <ul>
+      <% for (let i = 0; i < todo_list.length; i++) { %>
+      <li>
+        <span>事項：<%= todo_list[i].body %></span>
+        <div class="action">
+          <form
+            class="content"
+            action="/api/change"
+            method="post"
+            style="display: inline"
+          >
+            <input class="hidden" type="hidden" name="id" value="<%= todo_list[i].id %>" />
+            <input
+            class="input"
+              type="text"
+              name="body"
+              value="<%= todo_list[i].body %>"
+              required
+            />
+            <button class="edit" type="submit" onclick="clickEdit()">編輯</button>
+          </form>
+          <form
+            class="content"
+            action="/api/remove"
+            method="post"
+            style="display: inline"
+          >
+            <input type="hidden" name="id" value="<%= todo_list[i].id %>" />
+            <input type="hidden" name="body" value="<%= todo_list[i].body %>" />
+            <button class="edit" type="submit">刪除</button>
+          </form>
+        </div>
+      </li>
+      <% } %>
+    </ul>
+    <form action="/api/logout" method="get">
+      <button class="del" type="submit">登出</button>
+    </form>
+  </body>
+</html>
+<script>
+
+
+
+
+
+</script>

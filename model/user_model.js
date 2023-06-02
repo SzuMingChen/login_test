@@ -1,8 +1,8 @@
 const mysql = require("../config/mysql");
 
-const model = {
+
   //! 全部查
-  search_account: async (req, res) => {
+  exports.search_account = async (req, res) => {
     console.log('----進model---->');
     const transaction = await mysql.getConnection();
     try {
@@ -23,9 +23,10 @@ const model = {
       await transaction.rollback();
       throw error;
     }
-  },
+  };
+
   //! 查
-  check_account: async (user_account) => {
+  exports.check_account = async (user_account) => {
     console.log('----進model---->', user_account);
     const transaction = await mysql.getConnection();
     try {
@@ -46,14 +47,15 @@ const model = {
       await transaction.rollback();
       throw error;
     }
-  },
+  };
+
   //! 增
-  create_account: async (user_account, password, name, status) => {
+  exports.create_account = async (user_account, password, name) => {
     console.log('----進model---->', user_account);
     const transaction = await mysql.getConnection();
     try {
       await transaction.beginTransaction();
-      const target = `INSERT INTO \`user_account_table\` (\`user_account\`, \`password\`, \`name\`, \`status\`) VALUES ('${user_account}', '${password}', '${name}', ${status})`;
+      const target = `INSERT INTO \`user_account_table\` (\`user_account\`, \`password\`, \`name\`, \`status\`) VALUES ('${user_account}', '${password}', '${name}', 1)`;
       const [result] = await mysql.execute(target);
       console.log("----model回---->", result);
       if (result.affectedRows === 1) {
@@ -65,9 +67,10 @@ const model = {
       await transaction.rollback();
       throw error;
     }
-  },
+  };
+
   //! 刪
-  close_account: async (user_account) => {
+  exports.close_account = async (user_account) => {
     console.log('----進model---->', user_account);
     const transaction = await mysql.getConnection();
     try {
@@ -83,9 +86,10 @@ const model = {
       await transaction.rollback();
       throw error;
     }
-  },
+  };
+
   //! 改
-  edit_account: async (new_value, user_account) => {
+  exports.edit_account = async (new_value, user_account) => {
     console.log('----進model---->', user_account);
     const transaction = await mysql.getConnection();
     try {
@@ -102,7 +106,6 @@ const model = {
       await transaction.rollback();
       throw error;
     }
-  },
-};
+  };
 
-module.exports = model;
+
