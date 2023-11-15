@@ -29,14 +29,14 @@ exports.home = async (req, res) => {
   }
 
   //* 登入失敗，跳回主頁
-  return res.redirect('/api/home');
+  return res.redirect('/');
 
 };
 
 //! 新增待辦事項
 exports.write_new_list = async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/api/home');
+    return res.redirect('/');
   }
   console.log('----進ctrl---->', req.body);
   //* 初始化代辦事項
@@ -71,7 +71,7 @@ exports.write_new_list = async (req, res) => {
 //! 刪除事項
 exports.remove_my_list = async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/api/home');
+    return res.redirect('/');
   }
   console.log('----進ctrl---->', req.body);
   //todo 從 Session 中讀取使用者資料
@@ -88,13 +88,13 @@ exports.remove_my_list = async (req, res) => {
   if (!remove) {
     return res.status(404).send({ msg: "刪除失敗" });
   }
-  return res.redirect('/api/todo_list');
+  return res.redirect('/todo_list');
 };
 
 //! 更新事項
 exports.edit_my_list = async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/api/home');
+    return res.redirect('/');
   }
   console.log('----進ctrl---->', req.body);
   //todo 從 Session 中讀取使用者資料
@@ -111,6 +111,6 @@ exports.edit_my_list = async (req, res) => {
   if (!change) {
     return res.status(404).send({ msg: "編輯失敗" });
   }
-  return res.redirect('/api/todo_list');
+  return res.redirect('/todo_list');
 };
 

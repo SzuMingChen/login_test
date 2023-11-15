@@ -20,7 +20,7 @@ router.post("/remove", list_ctrl.remove_my_list);
 router.post("/change", list_ctrl.edit_my_list);
 
 //* 起始頁面
-router.get("/home", page.home);
+router.get("/", page.home);
 //* 註冊頁面跳轉
 router.get("/register", page.register);
 //* 忘記密碼頁面跳轉

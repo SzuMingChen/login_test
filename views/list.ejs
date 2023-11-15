@@ -82,7 +82,7 @@
   <body>
     <% for (let i = 0; i < 1; i++) { %>
     <h1><%= todo_list[i].name %>的To-Do List</h1>
-    <form class="list-input" action="/api/write" method="post">
+    <form class="list-input" action="/write" method="post">
       <input
         type="text"
         name="new_item"
@@ -99,7 +99,7 @@
         <div class="action">
           <form
             class="content"
-            action="/api/change"
+            action="/change"
             method="post"
             style="display: inline"
           >
@@ -115,7 +115,7 @@
           </form>
           <form
             class="content"
-            action="/api/remove"
+            action="/remove"
             method="post"
             style="display: inline"
           >
@@ -127,7 +127,7 @@
       </li>
       <% } %>
     </ul>
-    <form action="/api/logout" method="get">
+    <form action="/logout" method="get">
       <button class="del" type="submit">登出</button>
     </form>
   </body>

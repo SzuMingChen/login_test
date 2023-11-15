@@ -27,9 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //* 路徑
-app.use("/api", router);
+app.use(router);
 
 //* 啟動進入初始頁面
 app.listen(port, () => {
-  console.log(`http://127.0.0.1:${port}/api/home`);
+  console.log(`http://127.0.0.1:${port}/`);
 });

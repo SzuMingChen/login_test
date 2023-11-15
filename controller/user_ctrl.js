@@ -20,10 +20,10 @@ exports.login_account = async (req, res) => {
 
   if (req.session.user) {
     //* 成功就跳轉至todo_list頁面
-    return res.redirect('/api/todo_list');
+    return res.redirect('/todo_list');
   } else {
     //* 登入失敗，跳回主頁
-    return res.redirect('/api/home');
+    return res.redirect('/');
   }
 };
 
@@ -97,7 +97,7 @@ exports.logout_account = async (req, res) => {
       if (err) {
         console.log('session 清除失敗:', err);
       } else {
-        res.redirect('/api/home'); 
+        res.redirect('/'); 
       }
     });
 

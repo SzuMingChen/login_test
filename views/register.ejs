@@ -62,7 +62,7 @@
 <body>
   <div class="form-container">
     <h2><%= title %></h2>
-    <form action="/api/create" method="post">
+    <form action="/create" method="post">
       <input type="text" placeholder="暱稱..." name="name" required />
       <input type="text" placeholder="帳號..." name="user_account" required />
       <input type="password" placeholder="密碼..." name="password" required />
@@ -70,7 +70,7 @@
       <button type="submit">註冊</button>
     </form>
     <p></p>
-    <form action="/api/home" method="get">
+    <form action="/" method="get">
       <button type="submit">回登入頁</button>
     </form>
   </div>

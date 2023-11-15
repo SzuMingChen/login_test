@@ -60,17 +60,17 @@
   <body>
     <div class="form-container">
       <h1><%= title %></h1>
-      <form  action="/api/login" method="post" >
+      <form  action="/login" method="post" >
         <input type="text" placeholder="帳號" name="user_account" required />
         <input type="password" placeholder="密碼" name="password" required />
         <button type="submit">登入</button>
       </form>
       <p></p>
-      <form action="/api/register" method="get" >
+      <form action="/register" method="get" >
         <button type="submit">註冊</button>
       </form>
       <p></p>
-      <form action="/api/forgot" method="get" >
+      <form action="/forgot" method="get" >
         <button type="submit">忘記密碼?</button>
       </form>
     </div>
