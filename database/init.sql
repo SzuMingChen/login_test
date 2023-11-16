@@ -1,4 +1,4 @@
--- Active: 1700014186475@@127.0.0.1@3306@login
+-- Active: 1700125805233@@192.168.85.101@3306@todo_list
 CREATE TABLE `user_account_table` (
    `user_account` VARCHAR(255) NOT NULL COMMENT '帳號',
    `password` VARCHAR(255) DEFAULT '' COMMENT '密碼',
@@ -8,9 +8,11 @@ CREATE TABLE `user_account_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='帳號資訊';
 
 CREATE TABLE `todo_list_table` (
+   `id` INT NOT NULL AUTO_INCREMENT COMMENT '流水id',
    `user_account` VARCHAR(255) NOT NULL COMMENT '帳號',
    `body` VARCHAR(255) DEFAULT '' COMMENT '代辦內容',
    `name` VARCHAR(255) DEFAULT '' COMMENT '名稱',
    `delete_status` TINYINT NOT NULL DEFAULT '0' COMMENT '文章狀態, 0:創建;  1:關閉',
-   `list_update_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間'
+   `list_update_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
+   PRIMARY KEY (`id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='代辦項目';
